@@ -1,4 +1,3 @@
-from sre_constants import BIGCHARSET
 import tensorflow as tf
 import numpy as np
 
