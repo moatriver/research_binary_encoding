@@ -1,5 +1,6 @@
 import tensorflow as tf
 import numpy as np
+from models import my_cnn
 
 class BinaryTrainer():
     def __init__(self):
@@ -8,7 +9,7 @@ class BinaryTrainer():
         self.EPOCHS = 10
 
         bin_inputs = tf.keras.Input(shape=(28, 28, 1))
-        bin_output = tf.keras.layers.Activation("sigmoid")(self.my_cnn(bin_inputs, 4))
+        bin_output = tf.keras.layers.Activation("sigmoid")(my_cnn(bin_inputs, 4))
         self.bin_model = tf.keras.models.Model(inputs=bin_inputs, outputs=bin_output)
 
         self.bin_loss = tf.keras.losses.BinaryCrossentropy()
@@ -40,18 +41,6 @@ class BinaryTrainer():
 
         self.bin_train_ds = tf.data.Dataset.from_tensor_slices((image_train, self.binary_encode(label_train))).shuffle(10000).batch(batch_size)
         self.bin_test_ds = tf.data.Dataset.from_tensor_slices((image_test, self.binary_encode(label_test))).batch(32)
-
-    def my_cnn(self, inputs, output_dim):
-        x = tf.keras.layers.Conv2D(32, kernel_size=3)(inputs)
-        x = tf.keras.layers.Activation("relu")(x)
-
-        x = tf.keras.layers.Flatten()(x)
-
-        x = tf.keras.layers.Dense(128)(x)
-        x = tf.keras.layers.Activation("relu")(x)
-        x = tf.keras.layers.Dense(output_dim)(x)
-
-        return x
 
     
     @tf.function()

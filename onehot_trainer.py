@@ -1,4 +1,5 @@
 import tensorflow as tf
+from models import my_cnn
 
 class OneHotTrainer():
     def __init__(self):
@@ -7,7 +8,7 @@ class OneHotTrainer():
         self.EPOCHS = 10
         
         oh_inputs = tf.keras.Input(shape=(28, 28, 1))
-        oh_output = tf.keras.layers.Activation("softmax")(self.my_cnn(oh_inputs, 10))
+        oh_output = tf.keras.layers.Activation("softmax")(my_cnn(oh_inputs, 10))
         self.oh_model = tf.keras.models.Model(inputs=oh_inputs, outputs=oh_output)
 
         self.oh_loss = tf.keras.losses.CategoricalCrossentropy()
@@ -32,17 +33,6 @@ class OneHotTrainer():
         self.oh_train_ds = tf.data.Dataset.from_tensor_slices((image_train, label_train)).map(self.onehot_encode).shuffle(10000).batch(batch_size)
         self.oh_test_ds = tf.data.Dataset.from_tensor_slices((image_test, label_test)).map(self.onehot_encode).batch(32)
 
-    def my_cnn(self, inputs, output_dim):
-        x = tf.keras.layers.Conv2D(32, kernel_size=3)(inputs)
-        x = tf.keras.layers.Activation("relu")(x)
-
-        x = tf.keras.layers.Flatten()(x)
-
-        x = tf.keras.layers.Dense(128)(x)
-        x = tf.keras.layers.Activation("relu")(x)
-        x = tf.keras.layers.Dense(output_dim)(x)
-
-        return x
 
     @tf.function()
     def oh_train_step(self, images, labels):
