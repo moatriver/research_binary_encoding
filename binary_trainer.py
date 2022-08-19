@@ -15,9 +15,9 @@ class BinaryTrainer():
         self.bin_optimizer = tf.keras.optimizers.Adam()
 
         self.bin_train_loss = tf.keras.metrics.Mean(name='bin_train_loss')
-        self.bin_train_accuracy = tf.keras.metrics.Accuracy(name='bin_train_accuracy')
+        self.bin_train_accuracy = tf.keras.metrics.BinaryAccuracy(name='bin_train_accuracy')
         self.bin_test_loss = tf.keras.metrics.Mean(name='bin_test_loss')
-        self.bin_test_accuracy = tf.keras.metrics.Accuracy(name='bin_test_accuracy')
+        self.bin_test_accuracy = tf.keras.metrics.BinaryAccuracy(name='bin_test_accuracy')
 
     def binary_encode(self, labels):
         bit_length = 4
